@@ -1,0 +1,15 @@
+{
+  "name": "stubs",
+  "version": "0.0.0",
+  "description": "A collection of stubs.",
+  "engine": "node 0.10.0",
+  "main": "./lib",
+  "dependencies": {
+    "iron_mq": "0.2.0",
+    "lodash": "2.3.0"
+  },
+  "devDependencies": {
+    "expect.js": "0.2.0",
+    "mocha": "1.14.0"
+  }
+}
