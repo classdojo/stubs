@@ -200,6 +200,10 @@ describe("IronMQ Stub", function() {
             //just wait for multiple event boundaries to be crossed
             var jobs = queue.messages.concat(queue.outstandingMessages)
             expect(jobs).to.have.length(1);
+            jobs.forEach(function(j) {
+              expect(j).to.be.an(Object);
+              expect(j).to.not.be.an(Array);
+            });
             done();
           }, timeout * 10);
         });
