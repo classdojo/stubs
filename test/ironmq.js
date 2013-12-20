@@ -177,6 +177,33 @@ describe("IronMQ Stub", function() {
           }, timeout * 2);
         });
       });
+      describe("event loop timeout", function() {
+        var queue;
+        var interval;
+        var timeout = 20;
+        beforeEach(function(done) {
+          queue = new Queue("test", timeout);
+          queue.setMessages(["someMessage1"]);
+          done();
+        });
+        afterEach(function(done) {
+          queue.clear();
+          clearInterval(interval);
+          done();
+        });
+        it("should not error out when ticks cross multiple release time boundaries", function(done) {
+          interval = setInterval(function() {
+            queue.get({n: 1}, function(err, m) {
+            });
+          }, timeout / 2);
+          setTimeout(function() {
+            //just wait for multiple event boundaries to be crossed
+            var jobs = queue.messages.concat(queue.outstandingMessages)
+            expect(jobs).to.have.length(1);
+            done();
+          }, timeout * 10);
+        });
+      });
     });
 
     describe("#post", function() {
