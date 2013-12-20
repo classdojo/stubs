@@ -249,19 +249,38 @@ describe("IronMQ Stub", function() {
     describe("#del", function() {
       var queue;
       var message;
+      var timeout = 20;
       beforeEach(function(done) {
-        queue = new Queue("test");
+        queue = new Queue("test", timeout);
         queue.setMessages(["someMessage1"]);
+        queue.get({n: 1}, function(err, m) {
+          message = m;
+          done();
+        });
+      });
+      afterEach(function(done) {
+        queue.clear();
         done();
       });
 
       it("should delete this message if it's on the queue and released", function(done) {
-        var message = queue.messages[0];
+        // var message = queue.messages[0];
         queue.del(message.id, function(err) {
           expect(err).to.be(null);
           expect(queue.messages).to.have.length(0);
+          expect(queue.outstandingMessages).to.have.length(0);
           done();
         });
+      });
+      it("should delete the message after the release time", function(done) {
+        setTimeout(function() {
+          queue.del(message.id, function(err) {
+            expect(err).to.be(null);
+            expect(queue.messages).to.have.length(0);
+            expect(queue.outstandingMessages).to.have.length(0);
+            done();
+          });
+        }, timeout * 3);
       });
     });
 
