@@ -5,7 +5,6 @@
   "engine": "node 0.10.0",
   "main": "./lib",
   "dependencies": {
-    "iron_mq": "0.2.0",
     "lodash": "2.3.0"
   },
   "devDependencies": {
