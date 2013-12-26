@@ -1,6 +1,6 @@
 {
   "name": "stubs",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A collection of stubs.",
   "engine": "node 0.10.0",
   "main": "./lib",

@@ -285,7 +285,29 @@ describe("IronMQ Stub", function() {
     });
 
     describe("#msg_release", function() {
-
+      var queue;
+      var message;
+      var timeout = 20;
+      beforeEach(function(done) {
+        queue = new Queue("test", timeout);
+        queue.setMessages(["someMessage1"]);
+        queue.get({n: 1}, function(err, m) {
+          message = m;
+          done();
+        });
+      });
+      afterEach(function(done) {
+        queue.clear();
+        done();
+      });
+      it("should set the outstanding message back on the queue", function(done) {
+        queue.msg_release(message.id, {}, function(err) {
+          expect(err).to.be(null);
+          expect(queue.messages).to.have.length(1);
+          expect(queue.outstandingMessages).to.have.length(0);
+          done();
+        });
+      });
     });
   });
 });
